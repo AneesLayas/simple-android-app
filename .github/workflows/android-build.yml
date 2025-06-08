@@ -22,17 +22,25 @@ jobs:
     - name: Setup Android SDK
       uses: android-actions/setup-android@v3
       
-    - name: Download Gradle
+    - name: Create Gradle Wrapper
       run: |
-        wget https://services.gradle.org/distributions/gradle-7.5-bin.zip
-        unzip -d /opt/gradle gradle-7.5-bin.zip
-        echo "GRADLE_HOME=/opt/gradle/gradle-7.5" >> $GITHUB_ENV
-        echo "/opt/gradle/gradle-7.5/bin" >> $GITHUB_PATH
+        mkdir -p gradle/wrapper
+        echo "distributionBase=GRADLE_USER_HOME" > gradle/wrapper/gradle-wrapper.properties
+        echo "distributionPath=wrapper/dists" >> gradle/wrapper/gradle-wrapper.properties
+        echo "distributionUrl=https\://services.gradle.org/distributions/gradle-7.5-bin.zip" >> gradle/wrapper/gradle-wrapper.properties
+        echo "zipStoreBase=GRADLE_USER_HOME" >> gradle/wrapper/gradle-wrapper.properties
+        echo "zipStorePath=wrapper/dists" >> gradle/wrapper/gradle-wrapper.properties
+        
+    - name: Download Gradle Wrapper
+      run: |
+        wget https://raw.githubusercontent.com/gradle/gradle/v7.5.0/gradle/wrapper/gradle-wrapper.jar -O gradle/wrapper/gradle-wrapper.jar
+        chmod +x gradlew
+        chmod +x gradlew.bat
         
     - name: Build with Gradle
       run: |
-        gradle wrapper
-        ./gradlew assembleDebug --stacktrace
+        ./gradlew clean
+        ./gradlew assembleDebug --stacktrace --info
         
     - name: Upload APK
       uses: actions/upload-artifact@v4
