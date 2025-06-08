@@ -23,21 +23,10 @@ jobs:
     - name: Setup Android SDK
       uses: android-actions/setup-android@v3
       
-    - name: Cache Gradle packages
-      uses: actions/cache@v3
-      with:
-        path: ~/.gradle/caches
-        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-        restore-keys: |
-          ${{ runner.os }}-gradle-
-          
-    - name: Build Debug APK
-      uses: android-actions/build-android@v1
-      with:
-        buildType: debug
-        gradleVersion: 7.5
-        projectPath: .
-        arguments: --stacktrace
+    - name: Build with Gradle
+      run: |
+        chmod +x ./gradlew
+        ./gradlew assembleDebug --stacktrace
         
     - name: Upload APK
       uses: actions/upload-artifact@v4
