@@ -21,8 +21,8 @@ public class MainActivity extends AppCompatActivity {
 
         button.setOnClickListener(v -> {
             clickCount++;
-            textView.setText("Clicked " + clickCount + " times!");
-            Toast.makeText(MainActivity.this, "Button clicked!", Toast.LENGTH_SHORT).show();
+            textView.setText(getString(R.string.clicked_count, clickCount));
+            Toast.makeText(MainActivity.this, getString(R.string.button_clicked), Toast.LENGTH_SHORT).show();
         });
     }
 } 
